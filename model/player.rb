@@ -38,8 +38,8 @@ class Player
     @x = max_x if @x > max_x
     @y = max_y if @y > max_y
       
-    @vel_x *= 0.95
-    @vel_y *= 0.95
+    @vel_x *= 0.92
+    @vel_y *= 0.92
   end
 
   def draw
