@@ -6,6 +6,8 @@ class Player
     @score = 0
   end
 
+  attr_reader :score
+
   def warp(x, y)
     @x, @y = x, y
   end
@@ -25,7 +27,11 @@ class Player
   def go_left
     @vel_x -= 1
   end
-    
+  
+  def gain(bonus)
+    @score += bonus
+  end
+
   def move
     @x += @vel_x
     @y += @vel_y

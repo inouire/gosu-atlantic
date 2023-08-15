@@ -18,6 +18,8 @@ class Atlantic < Gosu::Window
 
     @bg_img = Gosu::Image.new("media/bg.png", :tileable => true)
 
+    @font = Gosu::Font.new(20)
+
     @player1 = Player.new
     @player1.warp(100, HEIGHT / 2)
 
@@ -77,6 +79,8 @@ class Atlantic < Gosu::Window
     @enemys.each do |enemy|
       enemy.shift(@speed)
     end
+
+    @player1.gain(1)
   end
   
   def draw
@@ -85,6 +89,8 @@ class Atlantic < Gosu::Window
     @player1.draw
     @walls.each(&:draw)
     @enemys.each(&:draw)
+
+    @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
   end
 end
 
