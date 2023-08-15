@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (11.1.3)
+    gosu (1.4.6)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  byebug
+  gosu
+
+BUNDLED WITH
+   2.4.18
