@@ -5,6 +5,7 @@ require "./model/enemy.rb"
 require "./model/algua.rb"
 require "./model/bonus.rb"
 require "./model/home.rb"
+require "./model/crabe.rb"
 require 'byebug'
 WIDTH  = 800
 HEIGHT = 400
@@ -44,12 +45,12 @@ class Atlantic < Gosu::Window
       @alguas << Algua.new(k, Random.rand(40), Random.rand(5))
     end
 
-    @bonus = []
+    @crabes = []
     k = 0
-    (1..20).each do |i|
+    (1..30).each do |i|
       k += Random.rand(600)
-      y = Random.rand(HEIGHT - 40)
-      @bonus << Bonus.new(k, y)
+      direction = Random.rand(8) - 2
+      @crabes << Crabe.new(k, direction)
     end
 
     @home = Home.new(@walls.last.x + 200)
@@ -92,11 +93,9 @@ class Atlantic < Gosu::Window
       @speed += 1
     end
 
-    (@walls + @enemys + @alguas + @bonus).each do |item|
+    (@crabes + @walls + @enemys + @alguas  + [@home]).each do |item|
       item.shift(@speed)
     end
-
-    @home.shift(@speed)
 
     @player1.gain(1)
   end
@@ -109,7 +108,7 @@ class Atlantic < Gosu::Window
     @enemys.each(&:draw)
     @alguas.each(&:draw)
     @home.draw
-    #@bonus.each(&:draw)
+    @crabes.each(&:draw)
 
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
   end
