@@ -2,7 +2,10 @@ require 'gosu'
 require "./model/player.rb"
 require "./model/wall.rb"
 require "./model/enemy.rb"
-
+require "./model/algua.rb"
+require "./model/bonus.rb"
+require "./model/home.rb"
+require 'byebug'
 WIDTH  = 800
 HEIGHT = 400
   
@@ -33,6 +36,23 @@ class Atlantic < Gosu::Window
       direction = Random.rand(100) % 2 == 0 ? :up : :down
       @walls << Wall.new(k, direction, Random.rand(4))
     end
+
+    @alguas = []
+    k = 0
+    (1..100).each do |i|
+      k += Random.rand(450)
+      @alguas << Algua.new(k, Random.rand(20), Random.rand(5))
+    end
+
+    @bonus = []
+    k = 0
+    (1..20).each do |i|
+      k += Random.rand(600)
+      y = Random.rand(HEIGHT - 40)
+      @bonus << Bonus.new(k, y)
+    end
+
+    @home = Home.new(@walls.last.x + 200)
 
     @enemys = []
     k = 0
@@ -72,13 +92,11 @@ class Atlantic < Gosu::Window
       @speed += 1
     end
 
-    @walls.each do |wall|
-      wall.shift(@speed)
+    (@walls + @enemys + @alguas + @bonus).each do |item|
+      item.shift(@speed)
     end
 
-    @enemys.each do |enemy|
-      enemy.shift(@speed)
-    end
+    @home.shift(@speed)
 
     @player1.gain(1)
   end
@@ -89,6 +107,9 @@ class Atlantic < Gosu::Window
     @player1.draw
     @walls.each(&:draw)
     @enemys.each(&:draw)
+    @alguas.each(&:draw)
+    @home.draw
+    #@bonus.each(&:draw)
 
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
   end

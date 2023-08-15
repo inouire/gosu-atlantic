@@ -10,6 +10,8 @@ class Wall
     end
   end
   
+  attr_reader :x
+    
   def shift(delta)
     @x -= delta
   end
