@@ -41,7 +41,7 @@ class Atlantic < Gosu::Window
     k = 0
     (1..100).each do |i|
       k += Random.rand(450)
-      @alguas << Algua.new(k, Random.rand(20), Random.rand(5))
+      @alguas << Algua.new(k, Random.rand(40), Random.rand(5))
     end
 
     @bonus = []

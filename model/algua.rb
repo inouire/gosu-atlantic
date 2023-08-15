@@ -4,7 +4,7 @@ class Algua
     @length = length
     @x = x
     @resize = resize
-    @y = HEIGHT - (RESIZE_FACTOR * @resize * length)
+    @y = HEIGHT - (length * @resize)
   end
   
   def shift(delta)
@@ -12,6 +12,6 @@ class Algua
   end
 
   def draw
-    @image.draw(@x, @y, 1, 2 * RESIZE_FACTOR, @resize * RESIZE_FACTOR)
+    @image.draw(@x, @y, 1, 1, @resize)
   end
 end
