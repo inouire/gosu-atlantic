@@ -19,13 +19,13 @@ class Enemy
 
     @x += @move_x
 
-    max_y = HEIGHT - 20 * RESIZE_FACTOR
+    max_y = HEIGHT - 40
     if @y > max_y || @y < 0
       @move_y = -@move_y
     end
   end
 
   def draw
-    @image.draw(@x, @y, 1, RESIZE_FACTOR, RESIZE_FACTOR)
+    @image.draw(@x, @y, 1)
   end
 end

@@ -49,6 +49,6 @@ class Player
   end
 
   def draw
-    @image.draw(@x, @y, 1, RESIZE_FACTOR, RESIZE_FACTOR)
+    @image.draw(@x, @y, 1)
   end
 end

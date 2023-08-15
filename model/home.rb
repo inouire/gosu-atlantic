@@ -9,6 +9,6 @@ class Home
   end
 
   def draw
-    @image.draw(@x, HEIGHT  - (37 * RESIZE_FACTOR * 2), 1, 2 * RESIZE_FACTOR, 2 * RESIZE_FACTOR)
+    @image.draw(@x, HEIGHT - 74, 1)
   end
 end
