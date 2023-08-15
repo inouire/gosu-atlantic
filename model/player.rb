@@ -6,6 +6,8 @@ class Player
     @score = 0
   end
 
+  attr_reader :x
+  attr_reader :y
   attr_reader :score
 
   def warp(x, y)

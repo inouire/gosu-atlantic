@@ -14,6 +14,7 @@ PLAYER_HEIGHT = 13
 PLAYER_WIDTH  = 18
 
 RESIZE_FACTOR = 2
+HIT_TOLERANCE = 3
 
 class Atlantic < Gosu::Window
   def initialize
@@ -98,6 +99,15 @@ class Atlantic < Gosu::Window
     end
 
     @player1.gain(1)
+
+    hero_width = 36
+    hero_height = 26 
+    @enemys.each do |enemy|
+      if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+        puts "HIT !!!!!!!"
+        @player1.gain(-250)
+      end
+    end
   end
   
   def draw
