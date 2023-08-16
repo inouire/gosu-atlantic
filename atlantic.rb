@@ -24,6 +24,10 @@ class Atlantic < Gosu::Window
 
     @font = Gosu::Font.new(20)
 
+    init_game
+  end 
+
+  def init_game
     @player1 = Player.new
     @player1.warp(100, HEIGHT / 2)
 
@@ -71,8 +75,8 @@ class Atlantic < Gosu::Window
 
     @bonuses = []
     k = 0
-    (1..10).each do |i|
-      k += Random.rand(800)
+    (1..6).each do |i|
+      k += Random.rand(1200)
       y = if Random.rand(100) % 2 == 0
         4
       else
@@ -81,8 +85,8 @@ class Atlantic < Gosu::Window
 
       @bonuses << Bonus.new(k, y)
     end
-  end 
-  
+  end
+
   def update
     if Gosu.button_down?(Gosu::KB_LEFT) or Gosu::button_down?(Gosu::GP_LEFT)
       @player1.go_left
@@ -95,6 +99,9 @@ class Atlantic < Gosu::Window
     end
     if Gosu.button_down?(Gosu::KB_DOWN)or Gosu::button_down?(Gosu::GP_BUTTON_1)
       @player1.go_down
+    end
+    if Gosu.button_down?(Gosu::KB_R)
+      init_game
     end
 
     @player1.move
@@ -122,6 +129,7 @@ class Atlantic < Gosu::Window
           @player1.gain(100)
         else
           @player1.kill
+          @speed = 0
         end
       end
     end
@@ -134,6 +142,7 @@ class Atlantic < Gosu::Window
           @player1.gain(50)
         else
           @player1.kill
+          @speed = 0
         end
       end
     end
@@ -162,6 +171,10 @@ class Atlantic < Gosu::Window
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
     if @player1.sub_countdown > 0
       @font.draw_text("* #{@player1.sub_countdown} *", WIDTH - 75, 10, 5, 1.0, 1.0, Gosu::Color::BLUE)
+    end
+
+    if @player1.dead?
+      @font.draw_text("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2, 10, 1.0, 1.0, Gosu::Color::YELLOW)
     end
   end
 end

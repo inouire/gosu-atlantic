@@ -18,9 +18,13 @@ class Player
   attr_reader :status
   attr_reader :score
   attr_reader :sub_countdown
-  
+
   def kill
     @status = :dead
+  end
+
+  def dead?
+    @status == :dead
   end
 
   def become_sub(type)
@@ -91,6 +95,6 @@ class Player
   end
 
   def draw
-    @images[@status].draw(@x, @y, 1)
+    @images[@status].draw(@x, @y, dead? ? 5 : 1)
   end
 end
