@@ -1,21 +1,34 @@
 class Player
   def initialize
     @images = {
-      :alive => Gosu::Image.new("./media/hero.png"),
-      :dead  => Gosu::Image.new("./media/hero_skel.png"),
+      :alive   => Gosu::Image.new("./media/hero.png"),
+      :dead    => Gosu::Image.new("./media/hero_skel.png"),
+      :perceur => Gosu::Image.new("./media/sub_perceur.png"),
+      :mangeur => Gosu::Image.new("./media/sub_mangeur.png"),
     }
     @x = @y = 100
     @vel_x = @vel_y = 0.0
     @score = 0
     @status = :alive
+    @sub_countdown = 0
   end
 
   attr_reader :x
   attr_reader :y
+  attr_reader :status
   attr_reader :score
 
   def kill
     @status = :dead
+  end
+
+  def become_sub(type)
+    @status = type.to_sym
+    @sub_countdown = 1000
+  end
+
+  def become_fish
+    @status = :alive
   end
 
   def warp(x, y)
@@ -45,6 +58,14 @@ class Player
   def shift(delta)
     return unless @status == :dead
     @x -= delta
+
+    if @sub_countdown > 0
+      @sub_countdown -= 1
+    end
+
+    if @sub_countdown < 0 && @status != :dead
+      @status == :alive
+    end
   end
 
   def move

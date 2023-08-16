@@ -68,6 +68,19 @@ class Atlantic < Gosu::Window
       direction = Random.rand(8) - 2
       @enemys << Enemy.new(k, HEIGHT - 30, "crabe", nil)
     end
+
+    @bonuses = []
+    k = 0
+    (1..10).each do |i|
+      k += Random.rand(800)
+      y = if Random.rand(100) % 2 == 0
+        4
+      else
+        HEIGHT - 16 - 4
+      end
+
+      @bonuses << Bonus.new(k, y)
+    end
   end 
   
   def update
@@ -92,19 +105,31 @@ class Atlantic < Gosu::Window
       @speed += 1
     end
 
-    (@walls + @enemys + @alguas  + [@home, @player1]).each do |item|
+    (@bonuses + @walls + @enemys + @alguas  + [@home, @player1]).each do |item|
       item.shift(@speed)
     end
 
-    @player1.gain(1)
+    @player1.gain(0)
 
     hero_width = 36
     hero_height = 26 
-    @enemys.each do |enemy|
-      if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
-        puts "HIT !!!!!!!"
-        @player1.gain(-250)
-        @player1.kill
+
+    if @player1.status != :mangeur
+      @enemys.each do |enemy|
+        if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+          puts "HIT !!!!!!!"
+          #@player1.gain(-250)
+          @player1.kill
+        end
+      end
+    end
+
+    if @player1.status == :alive
+      @bonuses.each do |bonus|
+        if bonus.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+          sub_type = Random.rand(100) % 2 == 0 ? "mangeur" : "perceur"
+          @player1.become_sub(sub_type)
+        end
       end
     end
   end
@@ -116,6 +141,7 @@ class Atlantic < Gosu::Window
     @walls.each(&:draw)
     @enemys.each(&:draw)
     @alguas.each(&:draw)
+    @bonuses.each(&:draw)
     @home.draw
 
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
