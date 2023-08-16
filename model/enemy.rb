@@ -50,7 +50,7 @@ class Enemy
     i2 = @x + @hit_width - HIT_TOLERANCE
     return false if i2 < x1
 
-    j2 = @y + @hit_width - HIT_TOLERANCE
+    j2 = @y + @hit_height - HIT_TOLERANCE
     return false if j2 < y1
 
     i1 = @x + HIT_TOLERANCE

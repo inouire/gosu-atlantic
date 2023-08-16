@@ -3,10 +3,15 @@ class Bonus
     @image = Gosu::Image.new("./media/bonus.png")
     @x = x
     @y = y
+    @display = true
   end
   
   def shift(delta)
     @x -= delta
+  end
+
+  def delete
+    @display = false
   end
 
   def hit?(x1, y1, x2, y2)
@@ -16,16 +21,18 @@ class Bonus
     j2 = @y + 16
     return false if j2 < y1
 
-    i1 = @x + 16
+    i1 = @x
     return false if i1 > x2
 
-    j1 = @y + 16
+    j1 = @y
     return false if j1 > y2
 
     return true
   end
 
   def draw
-    @image.draw(@x, @y, 4)
+    if @display
+      @image.draw(@x, @y, 4)
+    end
   end
 end

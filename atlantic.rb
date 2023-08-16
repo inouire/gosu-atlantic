@@ -124,11 +124,20 @@ class Atlantic < Gosu::Window
       end
     end
 
+    if @player1.status != :perceur
+      @walls.each do |wall|
+        if wall.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+          @player1.kill
+        end
+      end
+    end
+
     if @player1.status == :alive
       @bonuses.each do |bonus|
         if bonus.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
           sub_type = Random.rand(100) % 2 == 0 ? "mangeur" : "perceur"
           @player1.become_sub(sub_type)
+          bonus.delete
         end
       end
     end
@@ -145,6 +154,9 @@ class Atlantic < Gosu::Window
     @home.draw
 
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
+    if @player1.sub_countdown > 0
+      @font.draw_text("* #{@player1.sub_countdown} *", WIDTH - 75, 10, 5, 1.0, 1.0, Gosu::Color::BLUE)
+    end
   end
 end
 

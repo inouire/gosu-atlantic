@@ -17,14 +17,15 @@ class Player
   attr_reader :y
   attr_reader :status
   attr_reader :score
-
+  attr_reader :sub_countdown
+  
   def kill
     @status = :dead
   end
 
   def become_sub(type)
     @status = type.to_sym
-    @sub_countdown = 300
+    @sub_countdown = 500
   end
 
   def become_fish
