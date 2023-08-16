@@ -5,13 +5,12 @@ require "./model/enemy.rb"
 require "./model/algua.rb"
 require "./model/bonus.rb"
 require "./model/home.rb"
-require "./model/crabe.rb"
 require 'byebug'
 WIDTH  = 800
 HEIGHT = 400
   
-PLAYER_HEIGHT = 13
-PLAYER_WIDTH  = 18
+PLAYER_HEIGHT = 26
+PLAYER_WIDTH  = 36
 
 RESIZE_FACTOR = 2
 HIT_TOLERANCE = 3
@@ -46,14 +45,6 @@ class Atlantic < Gosu::Window
       @alguas << Algua.new(k, Random.rand(40), Random.rand(5))
     end
 
-    @crabes = []
-    k = 0
-    (1..30).each do |i|
-      k += Random.rand(600)
-      direction = Random.rand(8) - 2
-      @crabes << Crabe.new(k, direction)
-    end
-
     @home = Home.new(@walls.last.x + 200)
 
     @enemys = []
@@ -69,6 +60,13 @@ class Atlantic < Gosu::Window
 
       move = Random.rand(100) % 2 == 0 ? 1 : -1
       @enemys << Enemy.new(k, y, type, move)
+    end
+    
+    k = 0
+    (1..30).each do |i|
+      k += Random.rand(600)
+      direction = Random.rand(8) - 2
+      @enemys << Enemy.new(k, HEIGHT - 30, "crabe", nil)
     end
   end 
   
@@ -94,7 +92,7 @@ class Atlantic < Gosu::Window
       @speed += 1
     end
 
-    (@crabes + @walls + @enemys + @alguas  + [@home]).each do |item|
+    (@walls + @enemys + @alguas  + [@home, @player1]).each do |item|
       item.shift(@speed)
     end
 
@@ -106,6 +104,7 @@ class Atlantic < Gosu::Window
       if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
         puts "HIT !!!!!!!"
         @player1.gain(-250)
+        @player1.kill
       end
     end
   end
@@ -118,7 +117,6 @@ class Atlantic < Gosu::Window
     @enemys.each(&:draw)
     @alguas.each(&:draw)
     @home.draw
-    @crabes.each(&:draw)
 
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
   end

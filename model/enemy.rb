@@ -4,11 +4,18 @@ class Enemy
     @image = Gosu::Image.new("./media/#{type}.png")
     @x = x
     @y = y
-    @move_y = move
+    @move_y = if type == "crabe"
+      0
+    else
+      move
+    end
+
     @move_x = if type == "spike"
       -1
     elsif type == "squale"
       0.5
+    elsif type == "crabe"
+      Random.rand(8) - 2
     else
       0
     end
@@ -17,9 +24,10 @@ class Enemy
       "spike"  => [36, 24],
       "medusa" => [20, 36], 
       "squale" => [24, 18], 
+      "crabe"  => [46, 30], 
     }[type]
   end
-  
+
   def shift(delta)
     @x -= delta
     @y += @move_y

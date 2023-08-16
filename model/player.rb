@@ -1,14 +1,22 @@
 class Player
   def initialize
-    @image = Gosu::Image.new("./media/hero.png")
+    @images = {
+      :alive => Gosu::Image.new("./media/hero.png"),
+      :dead  => Gosu::Image.new("./media/hero_skel.png"),
+    }
     @x = @y = 100
     @vel_x = @vel_y = 0.0
     @score = 0
+    @status = :alive
   end
 
   attr_reader :x
   attr_reader :y
   attr_reader :score
+
+  def kill
+    @status = :dead
+  end
 
   def warp(x, y)
     @x, @y = x, y
@@ -34,23 +42,34 @@ class Player
     @score += bonus
   end
 
+  def shift(delta)
+    return unless @status == :dead
+    @x -= delta
+  end
+
   def move
-    @x += @vel_x
-    @y += @vel_y
+    if @status == :dead
+      if @y < HEIGHT - PLAYER_HEIGHT + 3
+        @y += 4
+      end
+    else
+      @x += @vel_x
+      @y += @vel_y
 
-    @x = 0 if @x < 0
-    @y = 0 if @y < 0
+      @x = 0 if @x < 0
+      @y = 0 if @y < 0
 
-    max_x = WIDTH - (RESIZE_FACTOR * PLAYER_WIDTH)
-    max_y = HEIGHT - (RESIZE_FACTOR * PLAYER_HEIGHT)
-    @x = max_x if @x > max_x
-    @y = max_y if @y > max_y
-      
-    @vel_x *= 0.92
-    @vel_y *= 0.92
+      max_x = WIDTH - PLAYER_WIDTH
+      max_y = HEIGHT - PLAYER_HEIGHT
+      @x = max_x if @x > max_x
+      @y = max_y if @y > max_y
+        
+      @vel_x *= 0.92
+      @vel_y *= 0.92
+    end
   end
 
   def draw
-    @image.draw(@x, @y, 1)
+    @images[@status].draw(@x, @y, 1)
   end
 end
