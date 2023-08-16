@@ -181,11 +181,14 @@ class Atlantic < Gosu::Window
       @font.draw_text("* #{@player1.sub_countdown} *", 3 * WIDTH / 4, HEIGHT / 2, 5, 1.0, 1.0, Gosu::Color::BLUE)
     end
 
-    if @player1.dead?
-      @font.draw_text("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2, 10, 1.0, 1.0, Gosu::Color::YELLOW)
-    elsif @won
-      @font.draw_text("*** YOU WON ***", WIDTH / 2 - 60, HEIGHT / 2, 10, 1.0, 1.0, Gosu::Color::YELLOW)
-      @font.draw_text("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2 + 15, 10, 1.0, 1.0, Gosu::Color::YELLOW)
+    if @player1.dead? || @won
+      if @player1.dead?
+        @font.draw_text("++ GAME OVER ++", WIDTH / 2 - 60, HEIGHT / 2 - 20, 10, 1.0, 1.0, Gosu::Color::BLUE)
+      elsif @won
+        @font.draw_text("*** YOU WON ***", WIDTH / 2 - 60, HEIGHT / 2 - 20, 10, 1.0, 1.0, Gosu::Color::YELLOW)
+      end
+      @font.draw_text("Score #{@player1.score}", WIDTH / 2 - 25, HEIGHT / 2, 10, 1.0, 1.0, Gosu::Color::YELLOW)
+      @font.draw_text("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2 + 20, 10, 1.0, 1.0, Gosu::Color::YELLOW)
     end
   end
 end
