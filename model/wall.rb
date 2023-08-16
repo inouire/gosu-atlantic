@@ -2,7 +2,7 @@ class Wall
   def initialize(x, up_or_down, resize)
     @images = {
       :alive => Gosu::Image.new("./media/wall#{up_or_down}.png"),
-      :dead  => Gosu::Image.new("./media/wall#{up_or_down}.png"),
+      :dead  => Gosu::Image.new("./media/wall#{up_or_down}_broken.png"),
     }
 
     @resize = resize
