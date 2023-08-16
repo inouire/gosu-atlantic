@@ -33,6 +33,10 @@ class Enemy
     @status = :alive
   end
 
+  def dead?
+    @status == :dead
+  end
+
   def kill
     @status = :dead
   end
@@ -55,7 +59,7 @@ class Enemy
       end
     end  
   end
-  
+
   ###########################
   #  . (i1,j1)
   #  

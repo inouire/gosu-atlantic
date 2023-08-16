@@ -1,6 +1,10 @@
 class Wall
   def initialize(x, up_or_down, resize)
-    @image = Gosu::Image.new("./media/wall#{up_or_down}.png")
+    @images = {
+      :alive => Gosu::Image.new("./media/wall#{up_or_down}.png"),
+      :dead  => Gosu::Image.new("./media/wall#{up_or_down}.png"),
+    }
+
     @resize = resize
     @x = x
     @y = if up_or_down == :up
@@ -11,9 +15,16 @@ class Wall
 
     @hit_height = 54 * @resize
     @hit_width  = 32 
+
+    @status = :alive
   end
   
   attr_reader :x
+
+  def dead?
+    @status == :dead
+  end
+
 
   def shift(delta)
     @x -= delta
@@ -41,7 +52,11 @@ class Wall
     return true
   end
 
+  def kill
+    @status = :dead
+  end
+
   def draw
-    @image.draw(@x, @y, 1, 1, @resize)
+    @images[@status].draw(@x, @y, 1, 1, @resize)
   end
 end

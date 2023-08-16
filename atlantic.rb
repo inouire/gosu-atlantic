@@ -115,18 +115,24 @@ class Atlantic < Gosu::Window
     hero_height = 26 
 
     @enemys.each do |enemy|
+      next if enemy.dead?
       if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
         if @player1.status == :mangeur
           enemy.kill
+          @player1.gain(100)
         else
           @player1.kill
         end
       end
     end
 
-    if @player1.status != :perceur
-      @walls.each do |wall|
-        if wall.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+    @walls.each do |wall|
+      next if wall.dead?
+      if wall.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+        if @player1.status == :perceur
+          wall.kill
+          @player1.gain(50)
+        else
           @player1.kill
         end
       end
