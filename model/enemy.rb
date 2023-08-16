@@ -1,7 +1,10 @@
 class Enemy
 
   def initialize(x, y, type, move)
-    @image = Gosu::Image.new("./media/#{type}.png")
+    @images = {
+      :alive => Gosu::Image.new("./media/#{type}.png"),
+      :dead  => Gosu::Image.new("./media/#{type}_skel.png"),
+    }
     @x = x
     @y = y
     @move_y = if type == "crabe"
@@ -26,20 +29,33 @@ class Enemy
       "squale" => [24, 18], 
       "crabe"  => [46, 30], 
     }[type]
+
+    @status = :alive
+  end
+
+  def kill
+    @status = :dead
   end
 
   def shift(delta)
     @x -= delta
-    @y += @move_y
 
-    @x += @move_x
+    if @status == :dead
+      if @y < HEIGHT - PLAYER_HEIGHT + 3
+        @y += 4
+      end
+    else
+      @y += @move_y
 
-    max_y = HEIGHT - 40
-    if @y > max_y || @y < 0
-      @move_y = -@move_y
-    end
+      @x += @move_x
+
+      max_y = HEIGHT - 40
+      if @y > max_y || @y < 0
+        @move_y = -@move_y
+      end
+    end  
   end
-
+  
   ###########################
   #  . (i1,j1)
   #  
@@ -47,6 +63,7 @@ class Enemy
   #                . (i2, j2)
   ###########################
   def hit?(x1, y1, x2, y2)
+    return false if @status == :dead
     i2 = @x + @hit_width - HIT_TOLERANCE
     return false if i2 < x1
 
@@ -63,6 +80,6 @@ class Enemy
   end
 
   def draw
-    @image.draw(@x, @y, 1)
+    @images[@status].draw(@x, @y, 1)
   end
 end

@@ -114,11 +114,11 @@ class Atlantic < Gosu::Window
     hero_width = 36
     hero_height = 26 
 
-    if @player1.status != :mangeur
-      @enemys.each do |enemy|
-        if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
-          puts "HIT !!!!!!!"
-          #@player1.gain(-250)
+    @enemys.each do |enemy|
+      if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+        if @player1.status == :mangeur
+          enemy.kill
+        else
           @player1.kill
         end
       end
