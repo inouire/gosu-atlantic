@@ -23,11 +23,11 @@ class Atlantic < Gosu::Window
     @bg_img = Gosu::Image.new("media/bg.png", :tileable => true)
 
     @font = Gosu::Font.new(20)
-
     init_game
   end 
 
   def init_game
+    @won = false
     @player1 = Player.new
     @player1.warp(100, HEIGHT / 2)
 
@@ -123,6 +123,7 @@ class Atlantic < Gosu::Window
 
     @enemys.each do |enemy|
       next if enemy.dead?
+      next if @won
       if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
         if @player1.status == :mangeur
           enemy.kill
@@ -136,6 +137,7 @@ class Atlantic < Gosu::Window
 
     @walls.each do |wall|
       next if wall.dead?
+      next if @won
       if wall.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
         if @player1.status == :perceur
           wall.kill
@@ -147,14 +149,20 @@ class Atlantic < Gosu::Window
       end
     end
 
-    if @player1.status == :alive
+    if !@player1.dead?
       @bonuses.each do |bonus|
+        next if bonus.used?
         if bonus.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
           sub_type = Random.rand(100) % 2 == 0 ? "mangeur" : "perceur"
           @player1.become_sub(sub_type)
           bonus.delete
         end
       end
+    end
+
+    if @home.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+      @speed = 0
+      @won = true
     end
   end
   
@@ -170,11 +178,14 @@ class Atlantic < Gosu::Window
 
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
     if @player1.sub_countdown > 0
-      @font.draw_text("* #{@player1.sub_countdown} *", WIDTH - 75, 10, 5, 1.0, 1.0, Gosu::Color::BLUE)
+      @font.draw_text("* #{@player1.sub_countdown} *", 3 * WIDTH / 4, HEIGHT / 2, 5, 1.0, 1.0, Gosu::Color::BLUE)
     end
 
     if @player1.dead?
       @font.draw_text("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2, 10, 1.0, 1.0, Gosu::Color::YELLOW)
+    elsif @won
+      @font.draw_text("*** YOU WON ***", WIDTH / 2 - 60, HEIGHT / 2, 10, 1.0, 1.0, Gosu::Color::YELLOW)
+      @font.draw_text("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2 + 15, 10, 1.0, 1.0, Gosu::Color::YELLOW)
     end
   end
 end

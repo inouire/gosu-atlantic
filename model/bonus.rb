@@ -14,6 +14,10 @@ class Bonus
     @display = false
   end
 
+  def used?
+    @display == false
+  end
+
   def hit?(x1, y1, x2, y2)
     i2 = @x + 16
     return false if i2 < x1
