@@ -1,6 +1,6 @@
 class Player
   def initialize
-    @image = Gosu::Image.new("/home/edouard/Cozy Drive/Administratif/perso/Jeux/atlantic/hero.png")
+    @image = Gosu::Image.new("./media/hero.png")
     @x = @y = 100
     @vel_x = @vel_y = 0.0
     @score = 0

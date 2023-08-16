@@ -1,6 +1,6 @@
 class Home
   def initialize(x)
-    @image = Gosu::Image.new("/home/edouard/Cozy Drive/Administratif/perso/Jeux/atlantic/home.png")
+    @image = Gosu::Image.new("./media/home.png")
     @x = x
   end
   

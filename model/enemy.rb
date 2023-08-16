@@ -1,7 +1,7 @@
 class Enemy
 
   def initialize(x, y, type, move)
-    @image = Gosu::Image.new("/home/edouard/Cozy Drive/Administratif/perso/Jeux/atlantic/#{type}.png")
+    @image = Gosu::Image.new("./media/#{type}.png")
     @x = x
     @y = y
     @move_y = move

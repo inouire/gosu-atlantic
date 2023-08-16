@@ -1,6 +1,6 @@
 class Wall
   def initialize(x, up_or_down, resize)
-    @image = Gosu::Image.new("/home/edouard/Cozy Drive/Administratif/perso/Jeux/atlantic/wall#{up_or_down}.png")
+    @image = Gosu::Image.new("./media/wall#{up_or_down}.png")
     @resize = resize
     @x = x
     @y = if up_or_down == :up

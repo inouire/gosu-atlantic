@@ -1,6 +1,6 @@
 class Bonus
   def initialize(x, y)
-    @image = Gosu::Image.new("/home/edouard/Cozy Drive/Administratif/perso/Jeux/atlantic/bonus.png")
+    @image = Gosu::Image.new("./media/bonus.png")
     @x = x
     @y = y
   end

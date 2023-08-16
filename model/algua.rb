@@ -1,6 +1,6 @@
 class Algua
   def initialize(x, length, resize)
-    @image = Gosu::Image.new("/home/edouard/Cozy Drive/Administratif/perso/Jeux/atlantic/algua.png")
+    @image = Gosu::Image.new("./media/algua.png")
     @length = length
     @x = x
     @resize = resize

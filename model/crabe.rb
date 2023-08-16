@@ -1,6 +1,6 @@
 class Crabe
   def initialize(x, direction)
-    @image = Gosu::Image.new("/home/edouard/Cozy Drive/Administratif/perso/Jeux/atlantic/crabe.png")
+    @image = Gosu::Image.new("./media/crabe.png")
     @x = x
     @move_x = direction
   end
