@@ -24,7 +24,7 @@ class Player
 
   def become_sub(type)
     @status = type.to_sym
-    @sub_countdown = 1000
+    @sub_countdown = 300
   end
 
   def become_fish
@@ -56,16 +56,15 @@ class Player
   end
 
   def shift(delta)
-    return unless @status == :dead
-    @x -= delta
-
     if @sub_countdown > 0
       @sub_countdown -= 1
     end
-
-    if @sub_countdown < 0 && @status != :dead
-      @status == :alive
+    if @sub_countdown <= 0 && @status != :dead
+      @status = :alive
     end
+
+    return unless @status == :dead
+    @x -= delta
   end
 
   def move
