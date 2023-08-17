@@ -31,6 +31,8 @@ class Atlantic < Gosu::Window
     @player1 = Player.new
     @player1.warp(100, HEIGHT / 2)
 
+    # @killed_sound = Gosu::Sample.new("media/beep.wav")
+
     @time = 0
     @speed  = 1
 
@@ -126,10 +128,12 @@ class Atlantic < Gosu::Window
       next if @won
       if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
         if @player1.status == :mangeur
+          
           enemy.kill
           @player1.gain(100)
         else
           @player1.kill
+          #@killed_sound.play
           @speed = 0
         end
       end
@@ -144,6 +148,7 @@ class Atlantic < Gosu::Window
           @player1.gain(50)
         else
           @player1.kill
+          #@killed_sound.play
           @speed = 0
         end
       end

@@ -28,7 +28,9 @@ class Player
   end
 
   def become_sub(type)
-    @status = type.to_sym
+    if @status == :alive
+      @status = type.to_sym
+    end
     @sub_countdown = 500
   end
 
