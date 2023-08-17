@@ -9,6 +9,8 @@ require 'byebug'
 WIDTH  = 800
 HEIGHT = 400
   
+SCENE_WIDTH = 12500
+
 PLAYER_HEIGHT = 26
 PLAYER_WIDTH  = 36
 
@@ -33,30 +35,33 @@ class Atlantic < Gosu::Window
 
     # @killed_sound = Gosu::Sample.new("media/beep.wav")
 
-    @time = 0
+    @distance = 0
     @speed  = 1
 
+    # Walls all along the way, home a bit after them
     @walls = []
-    k = 0
-    (1..100).each do |i|
-      k += Random.rand(250)
+    k = WIDTH / 4
+    
+    while k < SCENE_WIDTH
       direction = Random.rand(100) % 2 == 0 ? :up : :down
       @walls << Wall.new(k, direction, Random.rand(4))
+      k += (Random.rand(250) + 15)
     end
 
+    @home = Home.new(@walls.last.x + (3 * WIDTH / 4))
+
+    # Alguas everywhere even after the end
     @alguas = []
     k = 0
-    (1..100).each do |i|
-      k += Random.rand(450)
+    while k < (SCENE_WIDTH + 500)
       @alguas << Algua.new(k, Random.rand(40), Random.rand(5))
+      k += Random.rand(300)
     end
 
-    @home = Home.new(@walls.last.x + 200)
-
+    # Enemys everywhere even after the end
     @enemys = []
-    k = 0
-    (1..50).each do |i|
-      k += Random.rand(500)
+    k = WIDTH / 2
+    while k < (SCENE_WIDTH + 500)
       y = Random.rand(HEIGHT - 60)
       type = {
         0 => "spike",
@@ -66,19 +71,20 @@ class Atlantic < Gosu::Window
 
       move = Random.rand(100) % 2 == 0 ? 1 : -1
       @enemys << Enemy.new(k, y, type, move)
+      k += Random.rand(500)
     end
     
+    # A bit more crabs
     k = 0
-    (1..30).each do |i|
-      k += Random.rand(600)
+    while k < SCENE_WIDTH
       direction = Random.rand(8) - 2
       @enemys << Enemy.new(k, HEIGHT - 30, "crabe", nil)
+      k += Random.rand(800)
     end
 
     @bonuses = []
-    k = 0
-    (1..6).each do |i|
-      k += Random.rand(1200)
+    k = WIDTH
+    while k < (2 * SCENE_WIDTH / 3)
       y = if Random.rand(100) % 2 == 0
         4
       else
@@ -86,6 +92,7 @@ class Atlantic < Gosu::Window
       end
 
       @bonuses << Bonus.new(k, y)
+      k += Random.rand(1200)
     end
   end
 
@@ -108,12 +115,10 @@ class Atlantic < Gosu::Window
 
     @player1.move
 
-    @time += 1
-
-    if @time % 1000 == 0
-      @speed += 1
-    end
-
+    @distance += @speed
+    @speed = 1 + (@distance / 1500) if @speed != 0
+    @speed = 2 if @distance > SCENE_WIDTH
+    
     (@bonuses + @walls + @enemys + @alguas  + [@home, @player1]).each do |item|
       item.shift(@speed)
     end
@@ -160,6 +165,7 @@ class Atlantic < Gosu::Window
         if bonus.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
           sub_type = Random.rand(100) % 2 == 0 ? "mangeur" : "perceur"
           @player1.become_sub(sub_type)
+          @player1.gain(100)
           bonus.delete
         end
       end
@@ -182,6 +188,16 @@ class Atlantic < Gosu::Window
     @home.draw
 
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
+    vert = 25
+    [
+      ["Speed", @speed],
+      ["Distance", @distance],
+    ].each do |debug_label, debug_value|
+      @font.draw_text("#{debug_label}: #{debug_value}", 10, vert, 5, 1.0, 1.0, Gosu::Color::BLACK)
+      vert += 25
+    end
+    @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
+    
     if @player1.sub_countdown > 0
       @font.draw_text("* #{@player1.sub_countdown} *", 3 * WIDTH / 4, HEIGHT / 2, 5, 1.0, 1.0, Gosu::Color::BLUE)
     end
