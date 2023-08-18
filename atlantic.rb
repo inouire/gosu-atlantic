@@ -22,9 +22,10 @@ class Atlantic < Gosu::Window
     super WIDTH, HEIGHT
     self.caption = "Atlantic game"
 
-    @pop_sound   = Gosu::Sample.new("./media/pop.mp3")
-    @wall_sound  = Gosu::Sample.new("./media/wall.mp3")
-    @sonar_sound = Gosu::Sample.new("./media/sonar_ping.mp3")
+    @pop_sound     = Gosu::Sample.new("./media/pop.mp3")
+    @wall_sound    = Gosu::Sample.new("./media/wall.mp3")
+    @sonar_sound   = Gosu::Sample.new("./media/sonar.mp3")
+    @bubbles_sound = Gosu::Sample.new("./media/bubbles.mp3")
 
     @bg_img = Gosu::Image.new("media/bg.png", :tileable => true)
 
@@ -59,7 +60,7 @@ class Atlantic < Gosu::Window
     k = 0
     while k < (SCENE_WIDTH + 500)
       @alguas << Algua.new(k, Random.rand(40), Random.rand(5))
-      k += Random.rand(300)
+      k += Random.rand(200)
     end
 
     # Enemys everywhere even after the end
@@ -75,7 +76,7 @@ class Atlantic < Gosu::Window
 
       move = Random.rand(100) % 2 == 0 ? 1 : -1
       @enemys << Enemy.new(k, y, type, move)
-      k += Random.rand(500)
+      k += Random.rand(400)
     end
     
     # A bit more crabs
@@ -141,8 +142,9 @@ class Atlantic < Gosu::Window
           enemy.kill
           @pop_sound.play
           @player1.gain(100)
-        else
+        elsif @player1.status != :dead
           @player1.kill
+          @bubbles_sound.play
           @speed = 0
         end
       end
@@ -156,9 +158,9 @@ class Atlantic < Gosu::Window
           wall.kill
           @wall_sound.play
           @player1.gain(50)
-        else
+        elsif @player1.status != :dead
           @player1.kill
-          #@killed_sound.play
+          @bubbles_sound.play
           @speed = 0
         end
       end
@@ -170,11 +172,14 @@ class Atlantic < Gosu::Window
         if bonus.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
           sub_type = Random.rand(100) % 2 == 0 ? "mangeur" : "perceur"
           @player1.become_sub(sub_type)
-          @sonar_sound.play
           @player1.gain(100)
           bonus.delete
         end
       end
+    end
+
+    if [:mangeur, :perceur].include?(@player1.status) && [500, 325, 150].include?(@player1.sub_countdown)
+      @sonar_sound.play
     end
 
     if @home.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
