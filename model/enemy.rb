@@ -1,12 +1,9 @@
 class Enemy
 
   def initialize(x, y, type, move)
-    @images = {
-      :alive => Gosu::Image.new("./media/#{type}.png"),
-      :dead  => Gosu::Image.new("./media/#{type}_skel.png"),
-    }
     @x = x
     @y = y
+    @type = type
     @move_y = if type == "crabe"
       0
     else
@@ -84,6 +81,6 @@ class Enemy
   end
 
   def draw
-    @images[@status].draw(@x, @y, 1)
+    IMAGE[:"#{@type}_#{@status}"].draw(@x, @y, 1)
   end
 end

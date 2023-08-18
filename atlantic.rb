@@ -17,17 +17,29 @@ PLAYER_WIDTH  = 36
 RESIZE_FACTOR = 2
 HIT_TOLERANCE = 3
 
+IMAGE = {
+  :background   => Gosu::Image.new("media/bg.png", :tileable => true),
+  :spike_alive  => Gosu::Image.new("./media/spike.png"),
+  :spike_dead   => Gosu::Image.new("./media/spike_skel.png"),
+  :medusa_alive => Gosu::Image.new("./media/medusa.png"),
+  :medusa_dead  => Gosu::Image.new("./media/medusa_skel.png"),
+  :squale_alive => Gosu::Image.new("./media/squale.png"),
+  :squale_dead  => Gosu::Image.new("./media/squale_skel.png"),
+  :crabe_alive  => Gosu::Image.new("./media/crabe.png"),
+  :crabe_dead   => Gosu::Image.new("./media/crabe_skel.png"),
+}
+
+SOUND = {
+  :pop     => Gosu::Sample.new("./media/pop.mp3"),
+  :wall    => Gosu::Sample.new("./media/wall.mp3"),
+  :sonar   => Gosu::Sample.new("./media/sonar.mp3"),
+  :bubbles => Gosu::Sample.new("./media/bubbles.mp3"),
+}
+
 class Atlantic < Gosu::Window
   def initialize
     super WIDTH, HEIGHT
     self.caption = "Atlantic game"
-
-    @pop_sound     = Gosu::Sample.new("./media/pop.mp3")
-    @wall_sound    = Gosu::Sample.new("./media/wall.mp3")
-    @sonar_sound   = Gosu::Sample.new("./media/sonar.mp3")
-    @bubbles_sound = Gosu::Sample.new("./media/bubbles.mp3")
-
-    @bg_img = Gosu::Image.new("media/bg.png", :tileable => true)
 
     @font = Gosu::Font.new(20)
     init_game
@@ -37,8 +49,6 @@ class Atlantic < Gosu::Window
     @won = false
     @player1 = Player.new
     @player1.warp(100, HEIGHT / 2)
-
-    # @killed_sound = Gosu::Sample.new("media/beep.wav")
 
     @distance = 0
     @speed  = 1
@@ -140,11 +150,11 @@ class Atlantic < Gosu::Window
         if @player1.status == :mangeur
           
           enemy.kill
-          @pop_sound.play
+          SOUND[:pop].play
           @player1.gain(100)
         elsif @player1.status != :dead
           @player1.kill
-          @bubbles_sound.play
+          SOUND[:bubbles].play
           @speed = 0
         end
       end
@@ -156,11 +166,11 @@ class Atlantic < Gosu::Window
       if wall.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
         if @player1.status == :perceur
           wall.kill
-          @wall_sound.play
+          SOUND[:wall].play
           @player1.gain(50)
         elsif @player1.status != :dead
           @player1.kill
-          @bubbles_sound.play
+          SOUND[:bubbles].play
           @speed = 0
         end
       end
@@ -179,7 +189,7 @@ class Atlantic < Gosu::Window
     end
 
     if [:mangeur, :perceur].include?(@player1.status) && [500, 325, 150].include?(@player1.sub_countdown)
-      @sonar_sound.play
+      SOUND[:sonar].play
     end
 
     if @home.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
@@ -189,7 +199,7 @@ class Atlantic < Gosu::Window
   end
   
   def draw
-    @bg_img.draw(0, 0, 0)
+    IMAGE[:background].draw(0, 0, 0)
 
     @player1.draw
     @walls.each(&:draw)
