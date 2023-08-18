@@ -224,8 +224,8 @@ class Atlantic < Gosu::Window
   
   def draw
     IMAGE[:plan3].draw(0, 0, ZINDEX[:plan3])
-    IMAGE[:plan2].draw(0, 100, ZINDEX[:plan2])
-    IMAGE[:plan1].draw(0, 200, ZINDEX[:plan1])
+    IMAGE[:plan2].draw(0, 0, ZINDEX[:plan2])
+    IMAGE[:plan1].draw(0, 0, ZINDEX[:plan1])
 
     @player1.draw
     @walls.each(&:draw)
