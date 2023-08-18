@@ -22,6 +22,10 @@ class Atlantic < Gosu::Window
     super WIDTH, HEIGHT
     self.caption = "Atlantic game"
 
+    @pop_sound   = Gosu::Sample.new("./media/pop.mp3")
+    @wall_sound  = Gosu::Sample.new("./media/wall.mp3")
+    @sonar_sound = Gosu::Sample.new("./media/sonar_ping.mp3")
+
     @bg_img = Gosu::Image.new("media/bg.png", :tileable => true)
 
     @font = Gosu::Font.new(20)
@@ -135,10 +139,10 @@ class Atlantic < Gosu::Window
         if @player1.status == :mangeur
           
           enemy.kill
+          @pop_sound.play
           @player1.gain(100)
         else
           @player1.kill
-          #@killed_sound.play
           @speed = 0
         end
       end
@@ -150,6 +154,7 @@ class Atlantic < Gosu::Window
       if wall.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
         if @player1.status == :perceur
           wall.kill
+          @wall_sound.play
           @player1.gain(50)
         else
           @player1.kill
@@ -165,6 +170,7 @@ class Atlantic < Gosu::Window
         if bonus.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
           sub_type = Random.rand(100) % 2 == 0 ? "mangeur" : "perceur"
           @player1.become_sub(sub_type)
+          @sonar_sound.play
           @player1.gain(100)
           bonus.delete
         end
