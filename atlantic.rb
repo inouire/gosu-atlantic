@@ -61,7 +61,7 @@ class Atlantic < Gosu::Window
     # Enemys everywhere even after the end
     @enemys = []
     k = WIDTH / 2
-    while k < (SCENE_WIDTH + 500)
+    while k < (SCENE_WIDTH + 100)
       y = Random.rand(HEIGHT - 60)
       type = {
         0 => "spike",
@@ -118,7 +118,7 @@ class Atlantic < Gosu::Window
     @distance += @speed
     @speed = 1 + (@distance / 1500) if @speed != 0
     @speed = 2 if @distance > SCENE_WIDTH
-    
+
     (@bonuses + @walls + @enemys + @alguas  + [@home, @player1]).each do |item|
       item.shift(@speed)
     end
