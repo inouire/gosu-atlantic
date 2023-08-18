@@ -77,6 +77,9 @@ class Atlantic < Gosu::Window
     @distance = 0
     @speed  = 1
 
+    @plan1_offset = 1000
+    @plan2_offset = 1000
+
     # Walls all along the way, home a bit after them
     @walls = []
     k = WIDTH / 4
@@ -164,6 +167,13 @@ class Atlantic < Gosu::Window
 
     @player1.gain(0)
 
+    if @speed > 0
+      @plan1_offset -= 0.5 * @speed
+      @plan2_offset -= 0.1 * @speed
+      @plan1_offset = 1000 if @plan1_offset < 0
+      @plan2_offset = 1000 if @plan2_offset < 0
+    end
+
     hero_width = 36
     hero_height = 26 
 
@@ -224,8 +234,11 @@ class Atlantic < Gosu::Window
   
   def draw
     IMAGE[:plan3].draw(0, 0, ZINDEX[:plan3])
-    IMAGE[:plan2].draw(0, 0, ZINDEX[:plan2])
-    IMAGE[:plan1].draw(0, 0, ZINDEX[:plan1])
+    IMAGE[:plan2].draw(@plan2_offset - 1000, 0, ZINDEX[:plan2])
+    IMAGE[:plan1].draw(@plan1_offset - 1000, 0, ZINDEX[:plan1])
+
+    IMAGE[:plan2].draw(@plan2_offset, 0, ZINDEX[:plan2])
+    IMAGE[:plan1].draw(@plan1_offset, 0, ZINDEX[:plan1])
 
     @player1.draw
     @walls.each(&:draw)
