@@ -36,7 +36,7 @@ class Bonus
 
   def draw
     if @display
-      @image.draw(@x, @y, 4)
+      @image.draw(@x, @y, ZINDEX[:bonus])
     end
   end
 end

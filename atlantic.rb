@@ -6,6 +6,7 @@ require "./model/algua.rb"
 require "./model/bonus.rb"
 require "./model/home.rb"
 require 'byebug'
+
 WIDTH  = 800
 HEIGHT = 400
   
@@ -17,8 +18,23 @@ PLAYER_WIDTH  = 36
 RESIZE_FACTOR = 2
 HIT_TOLERANCE = 3
 
+ZINDEX = {
+  :plan3    => 0,
+  :plan2    => 1,
+  :plan1    => 2,
+  :hero     => 10,
+  :wall     => 11,
+  :bonus    => 12,
+  :fish     => 13,
+  :algua    => 14,
+  :progress => 15,
+  :score    => 16,
+}
+
 IMAGE = {
-  :background     => Gosu::Image.new("media/bg.png", :tileable => true),
+  :plan1          => Gosu::Image.new("./media/plan1.png"),
+  :plan2          => Gosu::Image.new("./media/plan2.png"),
+  :plan3          => Gosu::Image.new("./media/plan3.png"),
   :hero_alive     => Gosu::Image.new("./media/hero_nature.png"),
   :hero_dead      => Gosu::Image.new("./media/hero_skel.png"),
   :hero_perceur   => Gosu::Image.new("./media/sub_perceur.png"),
@@ -35,7 +51,6 @@ IMAGE = {
   :wallup_dead    => Gosu::Image.new("./media/wallup_broken.png"),
   :walldown_alive => Gosu::Image.new("./media/walldown.png"),
   :walldown_dead  => Gosu::Image.new("./media/walldown_broken.png"),
-
 }
 
 SOUND = {
@@ -208,7 +223,9 @@ class Atlantic < Gosu::Window
   end
   
   def draw
-    IMAGE[:background].draw(0, 0, 0)
+    IMAGE[:plan3].draw(0, 0, ZINDEX[:plan3])
+    IMAGE[:plan2].draw(0, 100, ZINDEX[:plan2])
+    IMAGE[:plan1].draw(0, 200, ZINDEX[:plan1])
 
     @player1.draw
     @walls.each(&:draw)
@@ -220,30 +237,19 @@ class Atlantic < Gosu::Window
     # SCENE_WIDTH -> WIDTH
     # distance    -> distance * WIDTH / SCENE_WIDTH
     progress = @distance * WIDTH / SCENE_WIDTH
-    Gosu.draw_rect(0, HEIGHT - 2, WIDTH, 2, Gosu::Color::YELLOW, 1)
-    Gosu.draw_rect(0, HEIGHT - 2, progress, 2, Gosu::Color.from_hsv(22, 81, 93), 1)
+    Gosu.draw_rect(0, HEIGHT - 2, WIDTH, 2, Gosu::Color::YELLOW, ZINDEX[:progress])
+    Gosu.draw_rect(0, HEIGHT - 2, progress, 2, Gosu::Color.from_hsv(22, 81, 93), ZINDEX[:progress])
 
-    @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
-    
-    if false   
-      vert = 25
-      [
-        ["Speed", @speed],
-        ["Distance", @distance],
-      ].each do |debug_label, debug_value|
-        @font.draw_text("#{debug_label}: #{debug_value}", 10, vert, 5, 1.0, 1.0, Gosu::Color::BLACK)
-        vert += 25
-      end
-    end
-    
+    @font.draw_text("Score: #{@player1.score}", 10, 10, ZINDEX[:score], 1.0, 1.0, Gosu::Color::BLACK)
+        
     if @player1.dead? || @won
       if @player1.dead?
-        @font.draw_text("++ GAME OVER ++", WIDTH / 2 - 60, HEIGHT / 2 - 20, 10, 1.0, 1.0, Gosu::Color::BLUE)
+        @font.draw_text("++ GAME OVER ++", WIDTH / 2 - 60, HEIGHT / 2 - 20, ZINDEX[:score], 1.0, 1.0, Gosu::Color::BLUE)
       elsif @won
-        @font.draw_text("*** YOU WON ***", WIDTH / 2 - 60, HEIGHT / 2 - 20, 10, 1.0, 1.0, Gosu::Color::YELLOW)
+        @font.draw_text("*** YOU WON ***", WIDTH / 2 - 60, HEIGHT / 2 - 20, ZINDEX[:score], 1.0, 1.0, Gosu::Color::BLACK)
       end
-      @font.draw_text("Score #{@player1.score}", WIDTH / 2 - 25, HEIGHT / 2, 10, 1.0, 1.0, Gosu::Color::YELLOW)
-      @font.draw_text("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2 + 20, 10, 1.0, 1.0, Gosu::Color::YELLOW)
+      @font.draw_text("Score #{@player1.score}", WIDTH / 2 - 25, HEIGHT / 2, ZINDEX[:score], 1.0, 1.0, Gosu::Color::BLACK)
+      @font.draw_text("Press R to restart", WIDTH / 2 - 60, HEIGHT / 2 + 20, ZINDEX[:score], 1.0, 1.0, Gosu::Color::BLACK)
     end
   end
 end

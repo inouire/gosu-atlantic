@@ -91,7 +91,7 @@ class Player
   end
 
   def draw
-    IMAGE[:"hero_#{@status}"].draw(@x, @y, dead? ? 5 : 1)
+    IMAGE[:"hero_#{@status}"].draw(@x, @y, ZINDEX[:hero])
 
     if @sub_countdown > 0 && [:perceur, :mangeur].include?(status)
       # 500       -> 30 px
@@ -102,8 +102,8 @@ class Player
         30
       end
       countdown_length = @sub_countdown * 30 / 500
-      Gosu.draw_rect(@x + 13, @y + offset, 30, 2, Gosu::Color::BLACK, 1)
-      Gosu.draw_rect(@x + 13, @y + offset, countdown_length, 2, Gosu::Color.from_hsv(22, 81, 93), 1)
+      Gosu.draw_rect(@x + 13, @y + offset, 30, 2, Gosu::Color::BLACK, ZINDEX[:progress])
+      Gosu.draw_rect(@x + 13, @y + offset, countdown_length, 2, Gosu::Color.from_hsv(22, 81, 93), ZINDEX[:progress])
     end
   end
 end

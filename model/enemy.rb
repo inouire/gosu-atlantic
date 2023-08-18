@@ -81,6 +81,6 @@ class Enemy
   end
 
   def draw
-    IMAGE[:"#{@type}_#{@status}"].draw(@x, @y, 1)
+    IMAGE[:"#{@type}_#{@status}"].draw(@x, @y, ZINDEX[:fish])
   end
 end

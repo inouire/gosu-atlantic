@@ -54,6 +54,6 @@ class Wall
   end
 
   def draw
-    IMAGE[:"wall#{@up_or_down}_#{@status}"].draw(@x, @y, 1, 1, @resize)
+    IMAGE[:"wall#{@up_or_down}_#{@status}"].draw(@x, @y, ZINDEX[:wall], 1, @resize)
   end
 end

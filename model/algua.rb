@@ -12,6 +12,6 @@ class Algua
   end
 
   def draw
-    @image.draw(@x, @y, 1, 1, @resize)
+    @image.draw(@x, @y, ZINDEX[:algua], 1, @resize)
   end
 end
