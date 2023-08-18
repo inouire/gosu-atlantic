@@ -18,15 +18,24 @@ RESIZE_FACTOR = 2
 HIT_TOLERANCE = 3
 
 IMAGE = {
-  :background   => Gosu::Image.new("media/bg.png", :tileable => true),
-  :spike_alive  => Gosu::Image.new("./media/spike.png"),
-  :spike_dead   => Gosu::Image.new("./media/spike_skel.png"),
-  :medusa_alive => Gosu::Image.new("./media/medusa.png"),
-  :medusa_dead  => Gosu::Image.new("./media/medusa_skel.png"),
-  :squale_alive => Gosu::Image.new("./media/squale.png"),
-  :squale_dead  => Gosu::Image.new("./media/squale_skel.png"),
-  :crabe_alive  => Gosu::Image.new("./media/crabe.png"),
-  :crabe_dead   => Gosu::Image.new("./media/crabe_skel.png"),
+  :background     => Gosu::Image.new("media/bg.png", :tileable => true),
+  :hero_alive     => Gosu::Image.new("./media/hero_nature.png"),
+  :hero_dead      => Gosu::Image.new("./media/hero_skel.png"),
+  :hero_perceur   => Gosu::Image.new("./media/sub_perceur.png"),
+  :hero_mangeur   => Gosu::Image.new("./media/sub_mangeur.png"),
+  :spike_alive    => Gosu::Image.new("./media/spike.png"),
+  :spike_dead     => Gosu::Image.new("./media/spike_skel.png"),
+  :medusa_alive   => Gosu::Image.new("./media/medusa.png"),
+  :medusa_dead    => Gosu::Image.new("./media/medusa_skel.png"),
+  :squale_alive   => Gosu::Image.new("./media/squale.png"),
+  :squale_dead    => Gosu::Image.new("./media/squale_skel.png"),
+  :crabe_alive    => Gosu::Image.new("./media/crabe.png"),
+  :crabe_dead     => Gosu::Image.new("./media/crabe_skel.png"),
+  :wallup_alive   => Gosu::Image.new("./media/wallup.png"),
+  :wallup_dead    => Gosu::Image.new("./media/wallup_broken.png"),
+  :walldown_alive => Gosu::Image.new("./media/walldown.png"),
+  :walldown_dead  => Gosu::Image.new("./media/walldown_broken.png"),
+
 }
 
 SOUND = {
@@ -124,7 +133,7 @@ class Atlantic < Gosu::Window
     if Gosu.button_down?(Gosu::KB_DOWN)or Gosu::button_down?(Gosu::GP_BUTTON_1)
       @player1.go_down
     end
-    if Gosu.button_down?(Gosu::KB_R)
+    if Gosu.button_down?(Gosu::KB_R) && @player1.dead?
       init_game
     end
 

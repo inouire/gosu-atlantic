@@ -1,11 +1,5 @@
 class Player
   def initialize
-    @images = {
-      :alive   => Gosu::Image.new("./media/hero_nature.png"),
-      :dead    => Gosu::Image.new("./media/hero_skel.png"),
-      :perceur => Gosu::Image.new("./media/sub_perceur.png"),
-      :mangeur => Gosu::Image.new("./media/sub_mangeur.png"),
-    }
     @x = @y = 100
     @vel_x = @vel_y = 0.0
     @score = 0
@@ -97,7 +91,7 @@ class Player
   end
 
   def draw
-    @images[@status].draw(@x, @y, dead? ? 5 : 1)
+    IMAGE[:"hero_#{@status}"].draw(@x, @y, dead? ? 5 : 1)
 
     if @sub_countdown > 0 && [:perceur, :mangeur].include?(status)
       # 500       -> 30 px

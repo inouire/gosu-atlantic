@@ -1,10 +1,5 @@
 class Wall
   def initialize(x, up_or_down, resize)
-    @images = {
-      :alive => Gosu::Image.new("./media/wall#{up_or_down}.png"),
-      :dead  => Gosu::Image.new("./media/wall#{up_or_down}_broken.png"),
-    }
-
     @resize = resize
     @x = x
     @y = if up_or_down == :up
@@ -12,6 +7,8 @@ class Wall
     else
       HEIGHT - (54 * @resize)
     end
+
+    @up_or_down = up_or_down
 
     @hit_height = 54 * @resize
     @hit_width  = 32 
@@ -57,6 +54,6 @@ class Wall
   end
 
   def draw
-    @images[@status].draw(@x, @y, 1, 1, @resize)
+    IMAGE[:"wall#{@up_or_down}_#{@status}"].draw(@x, @y, 1, 1, @resize)
   end
 end
