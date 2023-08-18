@@ -198,21 +198,25 @@ class Atlantic < Gosu::Window
     @bonuses.each(&:draw)
     @home.draw
 
-    @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
-    vert = 25
-    [
-      ["Speed", @speed],
-      ["Distance", @distance],
-    ].each do |debug_label, debug_value|
-      @font.draw_text("#{debug_label}: #{debug_value}", 10, vert, 5, 1.0, 1.0, Gosu::Color::BLACK)
-      vert += 25
-    end
+    # SCENE_WIDTH -> WIDTH
+    # distance    -> distance * WIDTH / SCENE_WIDTH
+    progress = @distance * WIDTH / SCENE_WIDTH
+    Gosu.draw_rect(0, HEIGHT - 2, WIDTH, 2, Gosu::Color::YELLOW, 1)
+    Gosu.draw_rect(0, HEIGHT - 2, progress, 2, Gosu::Color.from_hsv(22, 81, 93), 1)
+
     @font.draw_text("Score: #{@player1.score}", 10, 10, 5, 1.0, 1.0, Gosu::Color::YELLOW)
     
-    if @player1.sub_countdown > 0
-      @font.draw_text("* #{@player1.sub_countdown} *", 3 * WIDTH / 4, HEIGHT / 2, 5, 1.0, 1.0, Gosu::Color::BLUE)
+    if false   
+      vert = 25
+      [
+        ["Speed", @speed],
+        ["Distance", @distance],
+      ].each do |debug_label, debug_value|
+        @font.draw_text("#{debug_label}: #{debug_value}", 10, vert, 5, 1.0, 1.0, Gosu::Color::BLACK)
+        vert += 25
+      end
     end
-
+    
     if @player1.dead? || @won
       if @player1.dead?
         @font.draw_text("++ GAME OVER ++", WIDTH / 2 - 60, HEIGHT / 2 - 20, 10, 1.0, 1.0, Gosu::Color::BLUE)

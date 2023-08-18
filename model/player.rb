@@ -98,5 +98,21 @@ class Player
 
   def draw
     @images[@status].draw(@x, @y, dead? ? 5 : 1)
+
+
+    if @sub_countdown > 0
+      # 500       -> 30 px
+      # countdown -> countdown * 30 /  500
+      offset = if @status == :perceur
+        38
+      else
+        30
+      end
+      countdown_length = @sub_countdown * 30 / 500
+      Gosu.draw_rect(@x + 13, @y + offset, 30, 2, Gosu::Color::BLACK, 1)
+      Gosu.draw_rect(@x + 13, @y + offset, countdown_length, 2, Gosu::Color.from_hsv(22, 81, 93), 1)
+    end
+
+
   end
 end
