@@ -22,6 +22,7 @@ ZINDEX = {
   :plan3    => 0,
   :plan2    => 1,
   :plan1    => 2,
+  :home     => 6,
   :hero     => 10,
   :wall     => 11,
   :bonus    => 12,

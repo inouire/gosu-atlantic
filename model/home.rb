@@ -11,7 +11,7 @@ class Home
   end
 
   def draw
-    @image.draw(@x, @y, 0)
+    @image.draw(@x, @y, ZINDEX[:home])
   end
 
   def hit?(x1, y1, x2, y2)
