@@ -146,7 +146,7 @@ class Atlantic < Gosu::Window
         HEIGHT - 16 - 4
       end
 
-      @bonuses << Bonus.new(k, y, @bonuses.size == 2)
+      @bonuses << Bonus.new(k, y, @bonuses.size == 6)
       k += Random.rand(1200)
     end
   end
@@ -210,8 +210,7 @@ class Atlantic < Gosu::Window
       next if enemy.dead?
       next if @won
       if enemy.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
-        if @player1.status == :mangeur
-          
+        if [:mangeur, :super].include?(@player1.status)
           enemy.kill
           SOUND[:pop].play
           @player1.gain(100)
@@ -228,7 +227,7 @@ class Atlantic < Gosu::Window
       next if wall.dead?
       next if @won
       if wall.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
-        if @player1.status == :perceur
+        if [:perceur, :super].include?(@player1.status)
           wall.kill
           SOUND[:wall].play
           @player1.gain(50)
@@ -245,8 +244,11 @@ class Atlantic < Gosu::Window
       @bonuses.each do |bonus|
         next if bonus.used?
         if bonus.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
-          sub_type = Random.rand(100) % 2 == 0 ? "mangeur" : "perceur"
-          @player1.become_sub(sub_type)
+          sub_type = if bonus.is_super
+            @player1.become_super
+          else
+            @player1.become_sub(Random.rand(100) % 2 == 0 ? "mangeur" : "perceur")
+          end
           @player1.gain(100)
           bonus.delete
         end

@@ -28,6 +28,11 @@ class Player
     @sub_countdown = 500
   end
 
+  def become_super
+    @status = :super
+    @sub_countdown = 500
+  end
+
   def become_fish
     @status = :alive
   end
@@ -58,7 +63,7 @@ class Player
 
   def shift(delta)
     if @sub_countdown > 0
-      @sub_countdown -= 1
+      @sub_countdown -= @status == :super ? 2 : 1
     end
     if @sub_countdown <= 0 && @status != :dead
       @status = :alive
@@ -102,13 +107,14 @@ class Player
       0
     end
     IMAGE[:"hero_#{@status}"].draw(@x + xoffset, @y, ZINDEX[:hero], direction)
-    IMAGE[:"hero_super"].draw(@x + xoffset, @y, ZINDEX[:hero], direction)
 
-    if @sub_countdown > 0 && [:perceur, :mangeur].include?(status)
+    if @sub_countdown > 0 && [:super, :perceur, :mangeur].include?(status)
       # 500       -> 30 px
       # countdown -> countdown * 30 /  500
       offset = if @status == :perceur
         38
+      elsif @status == :super
+        32
       else
         30
       end
