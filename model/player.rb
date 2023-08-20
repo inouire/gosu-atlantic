@@ -96,7 +96,7 @@ class Player
   end
 
   def draw
-    direction = if @status == :alive
+    direction = if @status == :alive || @status == :super
       @vel_x > -0.1 ? 1 : -1
     else
       1
