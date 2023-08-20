@@ -1,6 +1,5 @@
 class Bonus
   def initialize(x, y)
-    @image = Gosu::Image.new("./media/bonus.png")
     @x = x
     @y = y
     @display = true
@@ -36,7 +35,7 @@ class Bonus
 
   def draw
     if @display
-      @image.draw(@x, @y, ZINDEX[:bonus])
+      IMAGE[:bonus].draw(@x, @y, ZINDEX[:bonus])
     end
   end
 end
