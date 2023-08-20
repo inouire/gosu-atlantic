@@ -91,7 +91,17 @@ class Player
   end
 
   def draw
-    IMAGE[:"hero_#{@status}"].draw(@x, @y, ZINDEX[:hero])
+    direction = if @status == :alive
+      @vel_x > -0.1 ? 1 : -1
+    else
+      1
+    end
+    xoffset = if direction == -1
+      PLAYER_WIDTH
+    else
+      0
+    end
+    IMAGE[:"hero_#{@status}"].draw(@x + xoffset, @y, ZINDEX[:hero], direction)
 
     if @sub_countdown > 0 && [:perceur, :mangeur].include?(status)
       # 500       -> 30 px

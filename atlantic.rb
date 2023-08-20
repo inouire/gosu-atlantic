@@ -22,7 +22,7 @@ ZINDEX = {
   :plan3    => 0,
   :plan2    => 1,
   :plan1    => 2,
-  :home     => 6,
+  :finish   => 6,
   :hero     => 10,
   :wall     => 11,
   :bonus    => 12,
@@ -33,10 +33,11 @@ ZINDEX = {
 }
 
 IMAGE = {
+  :finish         => Gosu::Image.new("./media/image/finish.png"),
   :plan1          => Gosu::Image.new("./media/plan1.png"),
   :plan2          => Gosu::Image.new("./media/plan2.png"),
   :plan3          => Gosu::Image.new("./media/plan3.png"),
-  :hero_alive     => Gosu::Image.new("./media/hero_nature.png"),
+  :hero_alive     => Gosu::Image.new("./media/hero.png"),
   :hero_dead      => Gosu::Image.new("./media/hero_skel.png"),
   :hero_perceur   => Gosu::Image.new("./media/sub_perceur.png"),
   :hero_mangeur   => Gosu::Image.new("./media/sub_mangeur.png"),
@@ -96,7 +97,7 @@ class Atlantic < Gosu::Window
     # Alguas everywhere even after the end
     @alguas = []
     k = 0
-    while k < (SCENE_WIDTH + 500)
+    while k < (SCENE_WIDTH + 800)
       @alguas << Algua.new(k, Random.rand(40), Random.rand(5))
       k += Random.rand(200)
     end
@@ -159,8 +160,18 @@ class Atlantic < Gosu::Window
     @player1.move
 
     @distance += @speed
-    @speed = 1 + (@distance / 1500) if @speed != 0
-    @speed = 2 if @distance > SCENE_WIDTH
+    @speed = 1 + (@distance / 1500) if @speed != 0 && !@won
+    @speed = 2 if @distance > SCENE_WIDTH && !@won
+
+    # Free roaming at the end
+    if @won
+      if @player1.x < 20
+        @speed = -3
+      end
+      if @player1.x > (WIDTH - 50)
+        @speed = 3
+      end
+    end
 
     (@bonuses + @walls + @enemys + @alguas  + [@home, @player1]).each do |item|
       item.shift(@speed)
@@ -187,7 +198,8 @@ class Atlantic < Gosu::Window
           enemy.kill
           SOUND[:pop].play
           @player1.gain(100)
-        elsif @player1.status != :dead
+        elsif @player1.status != :dead          
+          next if @won
           @player1.kill
           SOUND[:bubbles].play
           @speed = 0
@@ -204,6 +216,7 @@ class Atlantic < Gosu::Window
           SOUND[:wall].play
           @player1.gain(50)
         elsif @player1.status != :dead
+          next if @won
           @player1.kill
           SOUND[:bubbles].play
           @speed = 0
