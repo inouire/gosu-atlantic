@@ -5,6 +5,7 @@ require "./model/enemy.rb"
 require "./model/algua.rb"
 require "./model/bonus.rb"
 require "./model/home.rb"
+require "./model/bubble.rb"
 require 'byebug'
 
 WIDTH  = 800
@@ -37,6 +38,10 @@ IMAGE = {
   :plan1          => Gosu::Image.new("./media/plan1.png"),
   :plan2          => Gosu::Image.new("./media/plan2.png"),
   :plan3          => Gosu::Image.new("./media/plan3.png"),
+  :bubble1        => Gosu::Image.new("./media/bubble1.png"),
+  :bubble2        => Gosu::Image.new("./media/bubble2.png"),
+  :bubble3        => Gosu::Image.new("./media/bubble3.png"),
+  :bubble4        => Gosu::Image.new("./media/bubble4.png"),
   :hero_alive     => Gosu::Image.new("./media/hero.png"),
   :hero_dead      => Gosu::Image.new("./media/hero_skel.png"),
   :hero_perceur   => Gosu::Image.new("./media/sub_perceur.png"),
@@ -81,6 +86,8 @@ class Atlantic < Gosu::Window
 
     @plan1_offset = 1000
     @plan2_offset = 1000
+
+    @bubbles = []
 
     # Walls all along the way, home a bit after them
     @walls = []
@@ -173,7 +180,13 @@ class Atlantic < Gosu::Window
       end
     end
 
-    (@bonuses + @walls + @enemys + @alguas  + [@home, @player1]).each do |item|
+    if @distance % 100 <= 30 && @player1.status == :alive
+      if (@distance % 100) % 10 == 0
+        @bubbles << Bubble.new(@player1.x, @player1.y)
+      end
+    end
+
+    (@bubbles + @bonuses + @walls + @enemys + @alguas  + [@home, @player1]).each do |item|
       item.shift(@speed)
     end
 
@@ -259,6 +272,7 @@ class Atlantic < Gosu::Window
     @enemys.each(&:draw)
     @alguas.each(&:draw)
     @bonuses.each(&:draw)
+    @bubbles.each(&:draw)
     @home.draw
 
     # SCENE_WIDTH -> WIDTH
