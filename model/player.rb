@@ -102,6 +102,7 @@ class Player
       0
     end
     IMAGE[:"hero_#{@status}"].draw(@x + xoffset, @y, ZINDEX[:hero], direction)
+    IMAGE[:"hero_super"].draw(@x + xoffset, @y, ZINDEX[:hero], direction)
 
     if @sub_countdown > 0 && [:perceur, :mangeur].include?(status)
       # 500       -> 30 px

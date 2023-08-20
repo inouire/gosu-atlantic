@@ -1,10 +1,13 @@
 class Bonus
-  def initialize(x, y)
+  def initialize(x, y, is_super)
     @x = x
     @y = y
     @display = true
+    @is_super = is_super
   end
-  
+    
+  attr_reader :is_super
+
   def shift(delta)
     @x -= delta
   end
@@ -35,7 +38,11 @@ class Bonus
 
   def draw
     if @display
-      IMAGE[:bonus].draw(@x, @y, ZINDEX[:bonus])
+      if is_super
+        IMAGE[:bonus_super].draw(@x, @y, ZINDEX[:bonus])
+      else
+        IMAGE[:bonus].draw(@x, @y, ZINDEX[:bonus])
+      end
     end
   end
 end

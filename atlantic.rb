@@ -43,6 +43,7 @@ IMAGE = {
   :bubble3        => Gosu::Image.new("./media/image/bubble3.png"),
   :bubble4        => Gosu::Image.new("./media/image/bubble4.png"),
   :hero_alive     => Gosu::Image.new("./media/image/hero.png"),
+  :hero_super     => Gosu::Image.new("./media/image/hero_super.png"),
   :hero_dead      => Gosu::Image.new("./media/image/hero_skel.png"),
   :hero_perceur   => Gosu::Image.new("./media/image/sub_perceur.png"),
   :hero_mangeur   => Gosu::Image.new("./media/image/sub_mangeur.png"),
@@ -60,6 +61,7 @@ IMAGE = {
   :walldown_dead  => Gosu::Image.new("./media/image/walldown_broken.png"),
   :algua          => Gosu::Image.new("./media/image/algua.png"),
   :bonus          => Gosu::Image.new("./media/image/bonus.png"),
+  :bonus_super    => Gosu::Image.new("./media/image/bonus_super.png"),
 }
 
 SOUND = {
@@ -144,7 +146,7 @@ class Atlantic < Gosu::Window
         HEIGHT - 16 - 4
       end
 
-      @bonuses << Bonus.new(k, y)
+      @bonuses << Bonus.new(k, y, @bonuses.size == 2)
       k += Random.rand(1200)
     end
   end
