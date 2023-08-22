@@ -62,6 +62,8 @@ IMAGE = {
   :algua          => Gosu::Image.new("./media/image/algua.png"),
   :bonus          => Gosu::Image.new("./media/image/bonus.png"),
   :bonus_super    => Gosu::Image.new("./media/image/bonus_super.png"),
+  :pearl          => Gosu::Image.new("./media/image/pearl.png"),
+  :oyster         => Gosu::Image.new("./media/image/oyster.png"),
 }
 
 SOUND = {
