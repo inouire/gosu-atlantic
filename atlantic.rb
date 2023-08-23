@@ -6,6 +6,7 @@ require "./model/algua.rb"
 require "./model/bonus.rb"
 require "./model/home.rb"
 require "./model/bubble.rb"
+require "./model/pearl.rb"
 require 'byebug'
 
 WIDTH  = 800
@@ -30,7 +31,8 @@ ZINDEX = {
   :fish     => 13,
   :algua    => 14,
   :progress => 15,
-  :score    => 16,
+  :pearl    => 16,
+  :score    => 17,
 }
 
 IMAGE = {
@@ -63,7 +65,9 @@ IMAGE = {
   :bonus          => Gosu::Image.new("./media/image/bonus.png"),
   :bonus_super    => Gosu::Image.new("./media/image/bonus_super.png"),
   :pearl          => Gosu::Image.new("./media/image/pearl.png"),
-  :oyster         => Gosu::Image.new("./media/image/oyster.png"),
+  :oyster_alive   => Gosu::Image.new("./media/image/oyster.png"),
+  :oyster_dead    => Gosu::Image.new("./media/image/oyster.png"),
+  :pearl          => Gosu::Image.new("./media/image/pearl.png"),
 }
 
 SOUND = {
@@ -94,14 +98,23 @@ class Atlantic < Gosu::Window
     @plan2_offset = 1000
 
     @bubbles = []
+    @enemys = []
+    @pearls = []
 
     # Walls all along the way, home a bit after them
     @walls = []
+
     k = WIDTH / 4
     
     while k < SCENE_WIDTH
       direction = Random.rand(100) % 2 == 0 ? :up : :down
-      @walls << Wall.new(k, direction, Random.rand(4))
+      @walls << Wall.new(k, direction, 1 + Random.rand(3))
+      
+      if Random.rand(12) == 10
+        @enemys << Enemy.new(k - 12, direction == :up ? 16 : HEIGHT - 50, "oyster", nil)
+        @pearls << Pearl.new(k, direction == :up ? 33 : HEIGHT - 33)
+      end
+
       k += (Random.rand(250) + 15)
     end
 
@@ -116,7 +129,6 @@ class Atlantic < Gosu::Window
     end
 
     # Enemys everywhere even after the end
-    @enemys = []
     k = WIDTH / 2
     while k < (SCENE_WIDTH + 100)
       y = Random.rand(HEIGHT - 60)
@@ -128,7 +140,7 @@ class Atlantic < Gosu::Window
 
       move = Random.rand(100) % 2 == 0 ? 1 : -1
       @enemys << Enemy.new(k, y, type, move)
-      k += Random.rand(400)
+      k += Random.rand(300)
     end
     
     # A bit more crabs
@@ -137,6 +149,12 @@ class Atlantic < Gosu::Window
       direction = Random.rand(8) - 2
       @enemys << Enemy.new(k, HEIGHT - 30, "crabe", nil)
       k += Random.rand(800)
+    end
+
+    # A bit more oysters
+    k = 0
+    while k < SCENE_WIDTH
+      k += Random.rand(1200)
     end
 
     @bonuses = []
@@ -192,7 +210,7 @@ class Atlantic < Gosu::Window
       end
     end
 
-    (@bubbles + @bonuses + @walls + @enemys + @alguas  + [@home, @player1]).each do |item|
+    (@bubbles + @bonuses + @walls + @enemys + @alguas + @pearls + [@home, @player1]).each do |item|
       item.shift(@speed)
     end
 
@@ -207,6 +225,16 @@ class Atlantic < Gosu::Window
 
     hero_width = 36
     hero_height = 26 
+
+    @pearls.each do |pearl|
+      if pearl.x < WIDTH - 40
+        pearl.activate
+      end
+      if pearl.hit?(@player1.x, @player1.y, @player1.x + hero_width, @player1.y + hero_height)
+        @player1.gain(100)
+        pearl.delete
+      end
+    end
 
     @enemys.each do |enemy|
       next if enemy.dead?
@@ -281,6 +309,7 @@ class Atlantic < Gosu::Window
     @alguas.each(&:draw)
     @bonuses.each(&:draw)
     @bubbles.each(&:draw)
+    @pearls.each(&:draw)
     @home.draw
 
     # SCENE_WIDTH -> WIDTH

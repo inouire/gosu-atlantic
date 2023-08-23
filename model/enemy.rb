@@ -4,7 +4,7 @@ class Enemy
     @x = x
     @y = y
     @type = type
-    @move_y = if type == "crabe"
+    @move_y = if type == "crabe" || type == "oyster"
       0
     else
       move
@@ -25,6 +25,7 @@ class Enemy
       "medusa" => [20, 36], 
       "squale" => [24, 18], 
       "crabe"  => [46, 30], 
+      "oyster" => [36, 34], 
     }[type]
 
     @status = :alive
@@ -64,6 +65,7 @@ class Enemy
   #                . (i2, j2)
   ###########################
   def hit?(x1, y1, x2, y2)
+    return false if @type == "oyster"
     return false if @status == :dead
     i2 = @x + @hit_width - HIT_TOLERANCE
     return false if i2 < x1
