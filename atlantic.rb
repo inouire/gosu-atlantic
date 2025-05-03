@@ -64,7 +64,6 @@ IMAGE = {
   :algua          => Gosu::Image.new("./media/image/algua.png"),
   :bonus          => Gosu::Image.new("./media/image/bonus.png"),
   :bonus_super    => Gosu::Image.new("./media/image/bonus_super.png"),
-  :pearl          => Gosu::Image.new("./media/image/pearl.png"),
   :oyster_alive   => Gosu::Image.new("./media/image/oyster.png"),
   :oyster_dead    => Gosu::Image.new("./media/image/oyster.png"),
   :pearl          => Gosu::Image.new("./media/image/pearl.png"),
@@ -93,6 +92,7 @@ class Atlantic < Gosu::Window
 
     @distance = 0
     @speed  = 1
+    @easy = false
 
     @plan1_offset = 1000
     @plan2_offset = 1000
@@ -187,6 +187,13 @@ class Atlantic < Gosu::Window
     if Gosu.button_down?(Gosu::KB_R) && @player1.dead?
       init_game
     end
+    if Gosu.button_down?(Gosu::KB_X)
+      @easy = true
+    end
+    if Gosu.button_down?(Gosu::KB_Z)
+      @easy = false
+      @score = 0
+    end
 
     @player1.move
 
@@ -244,7 +251,7 @@ class Atlantic < Gosu::Window
           enemy.kill
           SOUND[:pop].play
           @player1.gain(100)
-        elsif @player1.status != :dead          
+        elsif @player1.status != :dead && !@easy
           next if @won
           @player1.kill
           SOUND[:bubbles].play
@@ -261,7 +268,7 @@ class Atlantic < Gosu::Window
           wall.kill
           SOUND[:wall].play
           @player1.gain(50)
-        elsif @player1.status != :dead
+        elsif @player1.status != :dead && !@easy
           next if @won
           @player1.kill
           SOUND[:bubbles].play
@@ -318,7 +325,11 @@ class Atlantic < Gosu::Window
     Gosu.draw_rect(0, HEIGHT - 2, WIDTH, 2, Gosu::Color::YELLOW, ZINDEX[:progress])
     Gosu.draw_rect(0, HEIGHT - 2, progress, 2, Gosu::Color.from_hsv(22, 81, 93), ZINDEX[:progress])
 
-    @font.draw_text("Score: #{@player1.score}", 10, 10, ZINDEX[:score], 1.0, 1.0, Gosu::Color::BLACK)
+    if @easy
+      @font.draw_text("PEACEFUL MODE", 10, 10, ZINDEX[:score], 1.0, 1.0, Gosu::Color::BLACK)
+    else
+      @font.draw_text("Score: #{@player1.score}", 10, 10, ZINDEX[:score], 1.0, 1.0, Gosu::Color::BLACK)
+    end
         
     if @player1.dead? || @won
       if @player1.dead?

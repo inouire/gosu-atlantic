@@ -5,6 +5,7 @@ GEM
     gosu (1.4.6)
 
 PLATFORMS
+  ruby
   x86_64-linux
 
 DEPENDENCIES
